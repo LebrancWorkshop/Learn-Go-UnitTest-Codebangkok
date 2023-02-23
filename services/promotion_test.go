@@ -1,6 +1,7 @@
 package services_test
 
 import (
+	"errors"
 	"lebrancconvas/gounittest/repositories"
 	"lebrancconvas/gounittest/services"
 	"testing"
@@ -44,6 +45,39 @@ func TestPromotionCalculateDiscount(t *testing.T) {
 			assert.Equal(t, expected, discount)
 		})
 	}
+
+	t.Run("amount zero not valid error", func(t *testing.T) {
+		// Arrange (เตรียมของ)
+		promoRepo := repositories.NewPromotionRepositoryMock()
+		promoRepo.On("GetPromotion").Return(repositories.Promotion{
+			ID: 1,
+			PurchaseMin: 100,
+			DiscountPercent: 20,
+		}, nil)
+	
+		promoService := services.NewPromotionService(promoRepo)
+	
+		// Act (ทำจริง)
+		_, err := promoService.CalculateDiscount(0)
+	
+		// Assert (ตรวจสอบ)
+		assert.ErrorIs(t, err, services.ErrNotValid)
+		promoRepo.AssertNotCalled(t, "GetPromotion")
+	})
+
+	t.Run("repository error", func(t *testing.T) {
+			// Arrange (เตรียมของ)
+			promoRepo := repositories.NewPromotionRepositoryMock()
+			promoRepo.On("GetPromotion").Return(repositories.Promotion{}, errors.New("error something"))
+		
+			promoService := services.NewPromotionService(promoRepo)
+		
+			// Act (ทำจริง)
+			_, err := promoService.CalculateDiscount(100)
+		
+			// Assert (ตรวจสอบ)
+			assert.ErrorIs(t, err, services.ErrRepository)
+	})
 
 
 
