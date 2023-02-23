@@ -18,7 +18,7 @@ func TestCheckGrade(t *testing.T) {
 		{name: "C", score: 60, expected: "C"},
 		{name: "D", score: 50, expected: "D"},
 		{name: "F", score: 40, expected: "F"},
-		{name: "F", score: 0, expected: "F"},
+		{name: "F", score: 0, expected: "X"},
 	}
 
 	for _, c := range cases {
