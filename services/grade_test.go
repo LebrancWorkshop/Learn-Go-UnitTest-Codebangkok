@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"lebrancconvas/gounittest/services"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckGrade(t *testing.T) {
@@ -25,9 +27,7 @@ func TestCheckGrade(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			result := services.CheckGrade(c.score)
-			if result != c.expected {
-				t.Errorf("expected %s, got %s", c.expected, result)
-			}
+			assert.Equal(t, c.expected, result)
 		})
 	}
 
