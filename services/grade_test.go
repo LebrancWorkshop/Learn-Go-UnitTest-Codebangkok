@@ -6,31 +6,32 @@ import (
 )
 
 func TestCheckGrade(t *testing.T) {
-	t.Run("A", func(t *testing.T) {
-		grade := services.CheckGrade(80)
-		expected := "A"
+	type testCase struct {
+		name string
+		score int
+		expected string
+	}
 
-		if grade != expected {
-			t.Errorf("Expected %s but got %s", expected, grade)
-		}
-	})
-	t.Run("B", func(t *testing.T) {
-		grade := services.CheckGrade(70)
-		expected := "B"
+	cases := []testCase{
+		{name: "A", score: 80, expected: "A"},
+		{name: "B", score: 70, expected: "B"},
+		{name: "C", score: 60, expected: "C"},
+		{name: "D", score: 50, expected: "D"},
+		{name: "F", score: 40, expected: "F"},
+		{name: "F", score: 0, expected: "F"},
+	}
 
-		if grade != expected {
-			t.Errorf("Expected %s but got %s", expected, grade)
-		}
-	})
-	t.Run("C", func(t *testing.T) {
-		grade := services.CheckGrade(60)
-		expected := "C"
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			result := services.CheckGrade(c.score)
+			if result != c.expected {
+				t.Errorf("expected %s, got %s", c.expected, result)
+			}
+		})
+	}
 
-		if grade != expected {
-			t.Errorf("Expected %s but got %s", expected, grade)
-		}
-	})
 }
+
 func TestHello(t *testing.T) {
 
 }
